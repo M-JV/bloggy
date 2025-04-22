@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1 All Users
+  if users.length
+    ul.list-group
+      each user in users
+        li.list-group-item
+          h5 #{user.username}
+          small.isAdmin Admin: #{user.isAdmin}
+  else
+    p.text-danger No users found

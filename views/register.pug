@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1 Register
+
+  if error
+    .alert.alert-danger.text-center(role="alert")= error
+
+  form(method="POST" action="/register")
+    .mb-3
+      label(for="username") Username
+      input.form-control(type="text" id="username" name="username" required)
+    .mb-3
+      label(for="password") Password
+      input.form-control(type="password" id="password" name="password" required)
+    button.btn.btn-primary(type="submit") Register

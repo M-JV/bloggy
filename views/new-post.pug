@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1 Create New Post
+
+  if error
+    .alert.alert-danger.text-center(role="alert")= error
+
+  form(method="POST" action="/posts")
+    .mb-3
+      label(for="title") Title
+      input.form-control(type="text" id="title" name="title" required)
+    .mb-3
+      label(for="content") Content
+      textarea.form-control(id="content" name="content" rows="5" required)
+    button.btn.btn-success(type="submit") Create Post

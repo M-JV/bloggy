@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  h1 All Posts
+
+  // Display Flash Messages
+  if success
+    .alert.alert-success= success
+  if error
+    .alert.alert-danger= error
+
+  // Search Results Indicator
+  if searchTerm
+    p.text-muted Search results for "#{searchTerm}"
+
+  // List All Posts or Display No Results Message
+  if posts.length
+    ul.list-group
+      each post in posts
+        li.list-group-item
+          h5
+            a(href=`/posts/${post._id}`) #{post.title}
+          small Created by #{post.createdBy.username} on #{post.createdAt.toDateString()}
+  else
+    p.text-danger No posts found matching "#{searchTerm}". Try another search!
+
+  // Button for Authenticated Users to Create a Post
+  if user
+    a.btn.btn-success.mt-4(href="/posts/new") Create New Post

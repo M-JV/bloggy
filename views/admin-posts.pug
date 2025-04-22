@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h1 All Blog Posts
+  if posts.length
+    ul.list-group
+      each post in posts
+        li.list-group-item
+          h5 #{post.title}
+          small Created by #{post.createdBy.username} on #{post.createdAt.toDateString()}
+          form(method="POST" action=`/admin/posts/${post._id}/delete`)
+            button.btn.btn-danger.btn-sm(type="submit") Delete
+  else
+    p.text-danger No posts found
