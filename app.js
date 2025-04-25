@@ -4,7 +4,7 @@ const session = require('express-session');
 const passport = require('passport');
 const flash = require('connect-flash');
 const path = require('path');
-
+const Post = require('./models/Post'); // Ensure this path is correct
 
 // Import Passport configuration
 require('./config/passportConfig'); // Make sure this points to your passportConfig.js file
@@ -16,6 +16,7 @@ mongoose.connect('mongodb+srv://mejova:me1jo2va3%40@bloggy.uw7kkkt.mongodb.net/?
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
+
   .then(() => {
     console.log('Connected to MongoDB Atlas successfully!');
   })
@@ -56,6 +57,17 @@ app.use(postRoutes); // Register the blog post routes
 
 const adminRoutes = require('./routes/admin');
 app.use(adminRoutes); // Use admin routes
+
+app.get('/', async (req, res) => {
+  try {
+    const posts = await Post.find().populate('createdBy', 'username').limit(3);
+    res.render('home', { posts });
+  } catch (err) {
+    console.error('Error fetching posts:', err);
+    req.flash('error', 'Error loading homepage.');
+    res.redirect('/posts');
+  }
+});
 
 // Server Startup
 const PORT = 3000;

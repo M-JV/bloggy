@@ -3,12 +3,6 @@ extends layout
 block content
   h1 All Posts
 
-  // Display Flash Messages
-  if success
-    .alert.alert-success= success
-  if error
-    .alert.alert-danger= error
-
   // Search Results Indicator
   if searchTerm
     p.text-muted Search results for "#{searchTerm}"

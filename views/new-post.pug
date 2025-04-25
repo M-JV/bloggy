@@ -3,9 +3,6 @@ extends layout
 block content
   h1 Create New Post
 
-  if error
-    .alert.alert-danger.text-center(role="alert")= error
-
   form(method="POST" action="/posts")
     .mb-3
       label(for="title") Title

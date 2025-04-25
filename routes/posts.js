@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const Post = require('../models/Post');
 const { postValidation } = require('../validation');
 const { isAuthenticated } = require('../middleware/auth');
@@ -11,7 +12,6 @@ router.get('/posts/new', isAuthenticated, (req, res) => {
 
 // Handle Post Creation
 router.post('/posts', isAuthenticated, async (req, res) => {
-  // Validate Input
   const { error } = postValidation.validate(req.body);
   if (error) {
     req.flash('error', error.details[0].message);
@@ -33,22 +33,21 @@ router.post('/posts', isAuthenticated, async (req, res) => {
 
 // View All Posts with Search Functionality
 router.get('/posts', async (req, res) => {
-  const searchTerm = req.query.search; // Get search term from query string
+  const searchTerm = req.query.search;
 
   try {
     let query = {};
     if (searchTerm) {
-      // MongoDB $regex for partial matches (case-insensitive)
       query = {
         $or: [
-          { title: { $regex: searchTerm, $options: 'i' } }, // Search by title
-          { tags: { $regex: searchTerm, $options: 'i' } },  // Search by tags
+          { title: { $regex: searchTerm, $options: 'i' } },
+          { tags: { $regex: searchTerm, $options: 'i' } },
         ],
       };
     }
 
-    const posts = await Post.find(query).populate('createdBy', 'username'); // Populate author info
-    res.render('posts', { posts, searchTerm }); // Pass searchTerm to the template
+    const posts = await Post.find(query).populate('createdBy', 'username');
+    res.render('posts', { posts, searchTerm });
   } catch (err) {
     console.error('Error fetching posts:', err);
     req.flash('error', 'Error fetching posts');
@@ -58,8 +57,20 @@ router.get('/posts', async (req, res) => {
 
 // View a Single Post
 router.get('/posts/:id', async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    req.flash('error', 'Invalid post ID');
+    return res.redirect('/posts');
+  }
+
   try {
-    const post = await Post.findById(req.params.id).populate('createdBy', 'username');
+    const post = await Post.findById(id).populate('createdBy', 'username');
+    if (!post) {
+      req.flash('error', 'Post not found');
+      return res.redirect('/posts');
+    }
+
     res.render('post', { post });
   } catch (err) {
     console.error('Error fetching post:', err);
@@ -70,12 +81,25 @@ router.get('/posts/:id', async (req, res) => {
 
 // Edit a Post (GET)
 router.get('/posts/:id/edit', isAuthenticated, async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    req.flash('error', 'Invalid post ID');
+    return res.redirect('/posts');
+  }
+
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(id);
+    if (!post) {
+      req.flash('error', 'Post not found');
+      return res.redirect('/posts');
+    }
+
     if (!req.user._id.equals(post.createdBy)) {
       req.flash('error', 'Unauthorized access');
       return res.redirect('/posts');
     }
+
     res.render('edit-post', { post });
   } catch (err) {
     console.error('Error fetching post for edit:', err);
@@ -86,15 +110,27 @@ router.get('/posts/:id/edit', isAuthenticated, async (req, res) => {
 
 // Update a Post (POST)
 router.post('/posts/:id', isAuthenticated, async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    req.flash('error', 'Invalid post ID');
+    return res.redirect('/posts');
+  }
+
   const { title, content, tags } = req.body;
+
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(id);
+    if (!post) {
+      req.flash('error', 'Post not found');
+      return res.redirect('/posts');
+    }
+
     if (!req.user._id.equals(post.createdBy)) {
       req.flash('error', 'Unauthorized access');
       return res.redirect('/posts');
     }
 
-    // Update post fields
     post.title = title;
     post.content = content;
     post.tags = tags;
@@ -104,14 +140,26 @@ router.post('/posts/:id', isAuthenticated, async (req, res) => {
   } catch (err) {
     console.error('Error updating post:', err);
     req.flash('error', 'Error updating post');
-    res.redirect(`/posts/${post._id}/edit`);
+    res.redirect(`/posts/${id}/edit`);
   }
 });
 
 // Delete a Post
 router.post('/posts/:id/delete', isAuthenticated, async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    req.flash('error', 'Invalid post ID');
+    return res.redirect('/posts');
+  }
+
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(id);
+    if (!post) {
+      req.flash('error', 'Post not found');
+      return res.redirect('/posts');
+    }
+
     if (!req.user._id.equals(post.createdBy)) {
       req.flash('error', 'Unauthorized access');
       return res.redirect('/posts');

@@ -41,10 +41,12 @@ html
 
     // Flash Messages Section
     .container.mt-2
-      if success
-        .alert.alert-success.text-center(role="alert")= success
-      if error
-        .alert.alert-danger.text-center(role="alert")= error
+      if success && success.length
+        .alert.alert-success.text-center(role="alert")= success[0]
+
+      if error && error.length
+        .alert.alert-danger.text-center(role="alert")= error[0]
+
 
     // Main Content Area
     .container.mt-4
