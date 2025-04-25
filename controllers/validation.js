@@ -1,3 +1,4 @@
+// validation.js
 const Joi = require('@hapi/joi');
 
 // Registration Validation Schema

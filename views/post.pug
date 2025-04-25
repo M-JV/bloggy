@@ -1,9 +1,9 @@
 extends layout
 
 block content
-  h1 #{post.title}
-  p #{post.content}
-  small Created by #{post.createdBy.username} on #{post.createdAt.toDateString()}
+  h1.text-primary= post.title
+  p= post.content
+  small.text-muted Created by #{post.createdBy.username} on #{post.createdAt.toDateString()}
   if user && user._id.equals(post.createdBy._id)
     a.btn.btn-primary.mt-3(href=`/posts/${post._id}/edit`) Edit
     form(action=`/posts/${post._id}/delete` method="POST")

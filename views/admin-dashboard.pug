@@ -1,9 +1,10 @@
 extends layout
 
 block content
-  h1 Admin Panel
-  ul.list-group
-    li.list-group-item
-      a(href="/admin/users") View All Users
-    li.list-group-item
-      a(href="/admin/posts") View All Blog Posts
+  h1.text-center.text-primary Admin Panel
+  .container.mt-3
+    .list-group
+      .list-group-item
+        a.btn.btn-outline-dark(href="/admin/users") View All Users
+      .list-group-item
+        a.btn.btn-outline-dark(href="/admin/posts") View All Blog Posts

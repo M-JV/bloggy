@@ -1,35 +1,34 @@
 extends layout
 
 block content
-  .container.text-center.mt-5
-    h1.text-primary Welcome to Bloggy
-    p.text-muted Your creative space for sharing ideas, thoughts, and inspiration.
+  .bg-light.min-vh-100.pt-5.pb-5
+    .container.text-center
+      h1.text-primary.mb-2 Welcome to Bloggy ✍️
+      p.text-muted.mb-4 Your creative space for sharing ideas, thoughts, and inspiration.
 
-  .container.mt-4
-    .row
-      .col-md-6
-        img.img-fluid(src="/public/blogging.jpg" alt="Blogging illustration")
-      .col-md-6
-        h3 Why Bloggy?
+    .container.mt-5
+        h3.text-dark.mb-3 Why Bloggy?
         ul.list-group
-          li.list-group-item Share your stories
-          li.list-group-item Connect with like-minded creators
-          li.list-group-item Explore a world of ideas
-        a.btn.btn-success.mt-3(href="/register") Get Started
-        a.btn.btn-outline-primary.mt-3(href="/posts") View Posts
+            li.list-group-item Share your stories
+            li.list-group-item Connect with like-minded creators
+            li.list-group-item Explore a world of ideas
+        .d-flex.gap-3.mt-3
+            a.btn.btn-success(href="/register") 🚀 Get Started
+            a.btn.btn-outline-primary(href="/posts") 📚 View Posts
 
-  .container.mt-5
-    h2.text-center Recent Blog Posts
-    if posts.length
-      .row
-        each post in posts
-          .col-md-4
-            .card.mb-3
-              .card-body
-                h5.card-title= post.title
-                p.card-text= post.content.substring(0, 100) + '...'
-                small.text-muted By #{post.createdBy.username}
-                a.btn.btn-primary.mt-2(href=`/posts/${post._id}`) Read More
-    else
-      p.text-center.text-muted No blog posts yet. Be the first to create one!
-      a.btn.btn-success.d-block.mx-auto(href="/posts/new") Write Your First Blog
+    .container.mt-5
+      h2.text-center.mb-4.text-secondary Recent Blog Posts
+      if posts.length
+        .row
+          each post in posts
+            .col-md-4
+              .card.mb-4.shadow-sm
+                .card-body
+                  h5.card-title= post.title
+                  p.card-text= post.content.substring(0, 100) + '...'
+                  small.text-muted By #{post.createdBy.username}
+                  br
+                  a.btn.btn-primary.mt-2(href=`/posts/${post._id}`) Read More
+      else
+        p.text-center.text-muted No blog posts yet. Be the first to create one!
+        a.btn.btn-success.d-block.mx-auto.mt-2(href="/posts/new") Write Your First Blog

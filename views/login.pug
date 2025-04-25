@@ -1,7 +1,16 @@
+//- views/login.pug
 extends layout
 
 block content
   h1 Login
+
+  // Flash messages
+  .container.mt-2
+    if success && success.length
+      .alert.alert-success.text-center(role="alert")= success[0]
+
+    if error && error.length
+      .alert.alert-danger.text-center(role="alert")= error[0]
 
   form(method="POST" action="/login")
     .mb-3

@@ -1,3 +1,5 @@
+//- views/new-post.pug
+
 extends layout
 
 block content
@@ -10,4 +12,7 @@ block content
     .mb-3
       label(for="content") Content
       textarea.form-control(id="content" name="content" rows="5" required)
+    .mb-3
+      label(for="tags") Tags (comma-separated)
+      input.form-control(type="text" id="tags" name="tags")
     button.btn.btn-success(type="submit") Create Post

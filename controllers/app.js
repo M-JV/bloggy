@@ -1,18 +1,19 @@
+// app.js
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('passport');
 const flash = require('connect-flash');
 const path = require('path');
-const Post = require('./models/Post'); // Ensure this path is correct
+const Post = require('../models/Post'); // Ensure this path is correct
 
 // Import Passport configuration
-require('./config/passportConfig'); // Make sure this points to your passportConfig.js file
+require('../config/passportConfig'); // Make sure this points to your passportConfig.js file
 
 const app = express();
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://mejova:me1jo2va3%40@bloggy.uw7kkkt.mongodb.net/?retryWrites=true&w=majority&appName=Bloggy', {
+mongoose.connect('mongodb+srv://mejova:me1jo2va3%40@bloggy.u09ewis.mongodb.net/?retryWrites=true&w=majority&appName=Bloggy', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -49,13 +50,13 @@ app.use((req, res, next) => {
 });
 
 // Routes
-const authRoutes = require('./routes/auth'); // Authentication routes
+const authRoutes = require('../routes/auth'); // Authentication routes
 app.use(authRoutes); // Use the routes
 
-const postRoutes = require('./routes/posts'); // Import post routes
+const postRoutes = require('../routes/posts'); // Import post routes
 app.use(postRoutes); // Register the blog post routes
 
-const adminRoutes = require('./routes/admin');
+const adminRoutes = require('../routes/admin');
 app.use(adminRoutes); // Use admin routes
 
 app.get('/', async (req, res) => {
@@ -68,6 +69,18 @@ app.get('/', async (req, res) => {
     res.redirect('/posts');
   }
 });
+
+app.get('/search', async (req, res) => {
+  const query = req.query.q;
+  try {
+    const posts = await Post.find({ title: { $regex: query, $options: 'i' } });
+    res.render('posts/search', { posts, query });
+  } catch (err) {
+    req.flash('error', 'Error while searching.');
+    res.redirect('/');
+  }
+});
+
 
 // Server Startup
 const PORT = 3000;
