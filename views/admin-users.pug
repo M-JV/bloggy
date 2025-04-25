@@ -1,8 +1,17 @@
+//- views/admin-users.pug
 extends layout
 
 block content
-  h1.text-center.text-primary All Users
-  .container.mt-3
+  style.
+    .admin-container {
+      background: #f8f9fa;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+  .container.admin-container
+    h1.text-center.text-primary All Users
     if users.length
       .list-group
         each user in users

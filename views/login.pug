@@ -1,22 +1,48 @@
-//- views/login.pug
 extends layout
 
 block content
-  h1 Login
+  style.
+    .login-card {
+      width: 90%;
+      max-width: 480px;
+      border-radius: 1rem;
+      background: #ffffffdd;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      font-family: 'Lora', serif;
+      padding: 2rem;
+    }
+    .form-control {
+      border-radius: 0.5rem;
+    }
+    .btn-primary {
+      border-radius: 0.5rem;
+      font-weight: bold;
+    }
+    .login-title {
+      font-family: 'Pacifico', cursive;
+      font-size: 2rem;
+      color: #d63384;
+      text-shadow: 1px 1px #ffffff;
+    }
+    .login-link {
+      font-family: 'Roboto', sans-serif;
+    }
 
-  // Flash messages
-  .container.mt-2
-    if success && success.length
-      .alert.alert-success.text-center(role="alert")= success[0]
+  .container-fluid.min-vh-100.d-flex.align-items-center.justify-content-center
+    .login-card
+      h2.card-title.text-center.login-title.mb-4 Login to Bloggy
+      form(action="/login" method="POST")
+        .mb-3
+          label(for="username" class="form-label") Username
+          input#username.form-control(type="text" name="username" placeholder="Enter your username" required)
+        .mb-3
+          label(for="password" class="form-label") Password
+          input#password.form-control(type="password" name="password" placeholder="Enter your password" required)
+        button.btn.btn-primary.w-100(type="submit") 🔐 Login
 
-    if error && error.length
-      .alert.alert-danger.text-center(role="alert")= error[0]
+      .text-center.mt-3.login-link
+        a.text-decoration-none(href="/register") Don’t have an account? <strong>Register</strong>
 
-  form(method="POST" action="/login")
-    .mb-3
-      label(for="username") Username
-      input.form-control(type="text" id="username" name="username" required)
-    .mb-3
-      label(for="password") Password
-      input.form-control(type="password" id="password" name="password" required)
-    button.btn.btn-primary(type="submit") Login
+      if error && error.length
+        .alert.alert-danger.text-center.mt-3(role="alert")= error[0]

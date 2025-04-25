@@ -1,28 +1,64 @@
 extends layout
 
 block content
-  .bg-light.min-vh-100.pt-5.pb-5
-    .container.text-center
+  style.
+    .hero-section {
+      backdrop-filter: blur(6px);
+      background-color: #ffffffcc;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      font-family: 'Lora', serif;
+    }
+    .why-section {
+      background: #f8f9fa;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+    }
+    .card {
+      border: none;
+      border-radius: 0.75rem;
+    }
+    .card-title {
+      color: #0d6efd;
+      font-family: 'Merriweather', serif;
+    }
+    .card-text {
+      font-family: 'Roboto', sans-serif;
+    }
+    .btn-success {
+      font-weight: bold;
+      border-radius: 0.5rem;
+    }
+    .btn-outline-primary {
+      font-weight: bold;
+      border-radius: 0.5rem;
+    }
+
+  .min-vh-100.pt-5.pb-5.d-flex.flex-column.align-items-center.justify-content-start
+    .container.text-center.hero-section
       h1.text-primary.mb-2 Welcome to Bloggy ✍️
       p.text-muted.mb-4 Your creative space for sharing ideas, thoughts, and inspiration.
 
-    .container.mt-5
-        h3.text-dark.mb-3 Why Bloggy?
-        ul.list-group
-            li.list-group-item Share your stories
-            li.list-group-item Connect with like-minded creators
-            li.list-group-item Explore a world of ideas
-        .d-flex.gap-3.mt-3
-            a.btn.btn-success(href="/register") 🚀 Get Started
-            a.btn.btn-outline-primary(href="/posts") 📚 View Posts
+    .container.mt-5.why-section
+      h3.text-dark.mb-3.text-center Why Bloggy?
+      ul.list-group.list-group-flush
+        li.list-group-item.bg-transparent.border-0.text-dark 💬 Share your stories
+        li.list-group-item.bg-transparent.border-0.text-dark 🤝 Connect with like-minded creators
+        li.list-group-item.bg-transparent.border-0.text-dark 🌍 Explore a world of ideas
+
+      .d-flex.justify-content-center.gap-3.mt-4
+        a.btn.btn-success(href="/register") 🚀 Get Started
+        a.btn.btn-outline-primary(href="/posts") 📚 View Posts
 
     .container.mt-5
       h2.text-center.mb-4.text-secondary Recent Blog Posts
       if posts.length
-        .row
+        .row.justify-content-center
           each post in posts
             .col-md-4
-              .card.mb-4.shadow-sm
+              .card.mb-4.shadow
                 .card-body
                   h5.card-title= post.title
                   p.card-text= post.content.substring(0, 100) + '...'

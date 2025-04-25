@@ -70,17 +70,6 @@ app.get('/', async (req, res) => {
   }
 });
 
-app.get('/search', async (req, res) => {
-  const query = req.query.q;
-  try {
-    const posts = await Post.find({ title: { $regex: query, $options: 'i' } });
-    res.render('posts/search', { posts, query });
-  } catch (err) {
-    req.flash('error', 'Error while searching.');
-    res.redirect('/');
-  }
-});
-
 
 // Server Startup
 const PORT = 3000;

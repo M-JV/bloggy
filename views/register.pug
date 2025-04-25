@@ -3,21 +3,29 @@
 extends layout
 
 block content
-  h1 Register
+  style.
+    .form-container {
+      background: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      font-family: 'Roboto', sans-serif;
+    }
 
-  // Flash messages
-  .container.mt-2
-    if success && success.length
-      .alert.alert-success.text-center(role="alert")= success[0]
+  .container.form-container
+    h1.text-primary.text-center Register
 
-    if error && error.length
-      .alert.alert-danger.text-center(role="alert")= error[0]
+    .container.mt-2
+      if success && success.length
+        .alert.alert-success.text-center(role="alert")= success[0]
+      if error && error.length
+        .alert.alert-danger.text-center(role="alert")= error[0]
 
-  form(method="POST" action="/register")
-    .mb-3
-      label(for="username") Username
-      input.form-control(type="text" id="username" name="username" required)
-    .mb-3
-      label(for="password") Password
-      input.form-control(type="password" id="password" name="password" required)
-    button.btn.btn-primary(type="submit") Register
+    form(method="POST" action="/register")
+      .mb-3
+        label(for="username") Username
+        input.form-control(type="text" id="username" name="username" required)
+      .mb-3
+        label(for="password") Password
+        input.form-control(type="password" id="password" name="password" required)
+      button.btn.btn-primary.w-100.mt-3(type="submit") Register

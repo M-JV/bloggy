@@ -1,10 +1,23 @@
+//-  views/post.pug
+
 extends layout
 
 block content
-  h1.text-primary= post.title
-  p= post.content
-  small.text-muted Created by #{post.createdBy.username} on #{post.createdAt.toDateString()}
-  if user && user._id.equals(post.createdBy._id)
-    a.btn.btn-primary.mt-3(href=`/posts/${post._id}/edit`) Edit
-    form(action=`/posts/${post._id}/delete` method="POST")
-      button.btn.btn-danger.mt-3(type="submit") Delete
+  style.
+    .post-container {
+      background-color: #fff;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      font-family: 'Roboto', sans-serif;
+    }
+
+  .container.post-container
+    h1.text-primary= post.title
+    p= post.content
+    small.text-muted Created by #{post.createdBy.username} on #{post.createdAt.toDateString()}
+
+    if user && user._id.equals(post.createdBy._id)
+      a.btn.btn-primary.mt-3(href=`/posts/${post._id}/edit`) Edit
+      form(action=`/posts/${post._id}/delete` method="POST")
+        button.btn.btn-danger.mt-3(type="submit") Delete

@@ -1,8 +1,18 @@
+//-  views/admin-dashboard.pug
+
 extends layout
 
 block content
-  h1.text-center.text-primary Admin Panel
-  .container.mt-3
+  style.
+    .admin-dashboard-container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+  .container.admin-dashboard-container
+    h1.text-center.text-primary Admin Panel
     .list-group
       .list-group-item
         a.btn.btn-outline-dark(href="/admin/users") View All Users

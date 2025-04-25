@@ -2,56 +2,85 @@ doctype html
 html
   head
     title Bloggy - Your Creative Space
-    link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css")
-    link(rel="stylesheet" href="/public/styles.css")
-    link(href="https://fonts.googleapis.com/css2?family=Lora&family=Merriweather&display=swap" rel="stylesheet")
-    link(rel='stylesheet', href='/css/style.css')
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css")
+    link(rel="stylesheet", href="/public/styles.css")
+    link(href="https://fonts.googleapis.com/css2?family=Pacifico&family=Lora&family=Roboto&display=swap" rel="stylesheet")
+    link(rel="stylesheet", href="/css/style.css")
+    style.
+      body {
+        background: linear-gradient(to right top, #fceabb, #f8b500, #fceabb);
+        min-height: 100vh;
+        font-family: 'Lora', serif;
+        background-attachment: fixed;
+      }
+      .navbar {
+        background: linear-gradient(to right, #ffecd2, #fcb69f);
+        font-family: 'Roboto', sans-serif;
+        border-bottom: 2px solid #ffc107;
+      }
+      .navbar-brand {
+        font-family: 'Pacifico', cursive;
+        font-size: 1.7rem;
+        color: #d63384 !important;
+        text-shadow: 1px 1px #ffffff;
+      }
+      .nav-link {
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+      .nav-link:hover {
+        color: #d63384 !important;
+      }
+      .footer {
+        background: linear-gradient(to right, #fcb69f, #ffecd2);
+        border-top: 2px solid #ffc107;
+      }
+      .alert {
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
 
   body
     // Navbar
-    nav.navbar.navbar-expand-lg.navbar-light.bg-light.shadow-sm.sticky-top
+    nav.navbar.navbar-expand-lg.navbar-light.shadow-sm.sticky-top
       .container-fluid
-        a.navbar-brand(href="/") Bloggy
+        a.navbar-brand(href="/") Bloggy ✨
         button.navbar-toggler(type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav")
           span.navbar-toggler-icon
         .collapse.navbar-collapse#navbarNav
-          ul.navbar-nav.ms-auto
+          ul.navbar-nav.ms-auto.align-items-center
             li.nav-item
               a.nav-link(href="/") Home
             li.nav-item
               a.nav-link(href="/posts") All Posts
-            
-            // Search Box
-            form.d-flex(action="/search" method="GET")
-              input.form-control.me-2(type="text" name="q" placeholder="Search posts..." required)
-              button.btn.btn-outline-success(type="submit") Search
+
+            form.d-flex.mx-2(action="/search" method="GET")
+              input.form-control.me-2(type="text" name="q" placeholder="Search..." required)
+              button.btn.btn-outline-dark(type="submit") 🔍
 
             if user
               li.nav-item
-                a.nav-link(href="/posts/new") Create New Post
-              
-              // Admin links
+                a.nav-link.text-success(href="/posts/new") ➕ New Post
               if user.isAdmin
                 li.nav-item
-                  a.nav-link.text-danger(href="/admin/users") Admin: View Users
+                  a.nav-link.text-danger(href="/admin/users") 🔧 Admin Users
                 li.nav-item
-                  a.nav-link.text-danger(href="/admin/posts") Admin: View Posts
+                  a.nav-link.text-danger(href="/admin/posts") 🛠 Admin Posts
 
-              // Show username or "Admin"
               li.nav-item
                 span.nav-link.text-primary.fw-bold
                   | 👤 #{user.isAdmin ? 'Admin' : user.username}
 
               li.nav-item
-                a.nav-link(href="/logout") Logout
+                a.nav-link.text-danger(href="/logout") ⏏ Logout
             else
               li.nav-item
-                a.nav-link(href="/login") Login
+                a.nav-link.text-info(href="/login") 🔐 Login
               li.nav-item
-                a.nav-link(href="/register") Register
+                a.nav-link.text-info(href="/register") 📝 Register
 
     // Flash Messages Section
-    .container.mt-2
+    .container.mt-3
       if success && success.length
         .alert.alert-success.text-center(role="alert")= success[0]
 
@@ -63,11 +92,11 @@ html
       block content
 
     // Footer
-    footer.footer.mt-auto.py-3.bg-light.shadow-sm
+    footer.footer.mt-auto.py-3
       .container.text-center
-        p &copy; 2025 Bloggy. Inspired by Medium & Notion.
+        p.text-muted.mb-0 &copy; 2025 Bloggy 🌟 | Built with ❤️ and ☕
 
-    // Bootstrap Scripts
+    // Scripts
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js")
     script.
       setTimeout(() => {
