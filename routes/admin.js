@@ -24,7 +24,7 @@ router.get('/admin/posts', isAdmin, async (req, res) => {
 
 // Admin Dashboard
 router.get('/admin', isAdmin, (req, res) => {
-    res.render('admin-dashboard');
+    res.render('home');
 });
 
 // Delete Any Post
