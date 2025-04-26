@@ -15,12 +15,6 @@ block content
   .container.form-container
     h1.text-primary.text-center Register
 
-    .container.mt-2
-      if success && success.length
-        .alert.alert-success.text-center(role="alert")= success[0]
-      if error && error.length
-        .alert.alert-danger.text-center(role="alert")= error[0]
-
     form(method="POST" action="/register")
       .mb-3
         label(for="username") Username

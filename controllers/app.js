@@ -2,46 +2,49 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
-const passport = require('passport');
 const flash = require('connect-flash');
+const passport = require('passport');
 const path = require('path');
-const Post = require('../models/Post'); // Ensure this path is correct
+const Post = require('../models/Post'); // Make sure this path is correct
 
 // Import Passport configuration
-require('../config/passportConfig'); // Make sure this points to your passportConfig.js file
+require('../config/passportConfig'); // Ensure this points to your passportConfig.js file
 
 const app = express();
 
 // Connect to MongoDB
 mongoose.connect('mongodb+srv://mejova:me1jo2va3%40@bloggy.u09ewis.mongodb.net/?retryWrites=true&w=majority&appName=Bloggy', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => {
+  console.log('✅ Connected to MongoDB Atlas successfully!');
+})
+.catch((err) => {
+  console.error('❌ MongoDB connection error:', err);
+});
 
-  .then(() => {
-    console.log('Connected to MongoDB Atlas successfully!');
-  })
-  .catch((err) => {
-    console.error('MongoDB connection error:', err);
-  });
-  
-
-// Middleware
+// Middleware Setup
 app.use(express.urlencoded({ extended: true })); // Parse form data
 app.use(express.static(path.join(__dirname, 'public'))); // Serve static files
+
 app.set('view engine', 'pug'); // Set Pug as the view engine
 
-// Session and Passport
+// Session middleware
 app.use(session({
-  secret: 'yourSecretKey',
+  secret: 'yourSecretKey', // Replace with a strong secret in production!
   resave: false,
   saveUninitialized: false,
 }));
-app.use(passport.initialize());
-app.use(passport.session());
+
+// Flash middleware (MUST come immediately after session)
 app.use(flash());
 
-// Flash messages middleware
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Global Variables Middleware (for flash messages and user info)
 app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
@@ -49,19 +52,22 @@ app.use((req, res, next) => {
   next();
 });
 
-// Routes
-const authRoutes = require('../routes/auth'); // Authentication routes
-app.use(authRoutes); // Use the routes
-
-const postRoutes = require('../routes/posts'); // Import post routes
-app.use(postRoutes); // Register the blog post routes
-
+// Route Handlers
+const authRoutes = require('../routes/auth');
+const postRoutes = require('../routes/posts');
 const adminRoutes = require('../routes/admin');
-app.use(adminRoutes); // Use admin routes
 
+app.use(authRoutes);
+app.use(postRoutes);
+app.use(adminRoutes);
+
+// Home Route
 app.get('/', async (req, res) => {
   try {
-    const posts = await Post.find().populate('createdBy', 'username').limit(3);
+    const posts = await Post.find()
+      .populate('createdBy', 'username')
+      .limit(3);
+
     res.render('home', { posts });
   } catch (err) {
     console.error('Error fetching posts:', err);
@@ -70,10 +76,8 @@ app.get('/', async (req, res) => {
   }
 });
 
-
 // Server Startup
 const PORT = 3000;
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`🚀 Server is running at: http://localhost:${PORT}`);
 });
-
