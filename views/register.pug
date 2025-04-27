@@ -17,6 +17,7 @@ block content
     h1.text-primary.text-center Register
 
     form(method="POST" action="/register")
+      input(type="hidden" name="_csrf" value=csrfToken)
       .mb-3
         label(for="username") Username
         input.form-control(type="text" id="username" name="username" required)

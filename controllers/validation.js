@@ -10,6 +10,7 @@ const registerValidation = Joi.object({
     'string.min': 'Password must be at least 6 characters long',
     'string.empty': 'Password is required',
   }),
+  _csrf: Joi.string(), // allow _csrf token
 });
 
 // Login Validation Schema
@@ -20,6 +21,7 @@ const loginValidation = Joi.object({
   password: Joi.string().required().messages({
     'string.empty': 'Password is required',
   }),
+  _csrf: Joi.string(), // allow _csrf token
 });
 
 // Blog Post Validation Schema
@@ -30,6 +32,7 @@ const postValidation = Joi.object({
   content: Joi.string().required().messages({
     'string.empty': 'Content is required',
   }),
+  _csrf: Joi.string(), // allow _csrf token
 });
 
 module.exports = { registerValidation, loginValidation, postValidation };

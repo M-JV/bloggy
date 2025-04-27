@@ -1,3 +1,4 @@
+//- views/login.pug
 extends layout
 
 block content
@@ -27,4 +28,5 @@ block content
       .button-group
         a.btn.btn-primary(href=`/posts/${post._id}/edit`) Edit
         form(action=`/posts/${post._id}/delete` method="POST")
+          input(type="hidden" name="_csrf" value=csrfToken)
           button.btn.btn-danger(type="submit") Delete

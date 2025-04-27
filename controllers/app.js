@@ -6,6 +6,8 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const path = require('path');
 const Post = require('../models/Post'); // Make sure this path is correct
+const { csrfProtection, addCsrfToken } = require('../middleware/csrf');
+
 
 // Import Passport configuration
 require('../config/passportConfig'); // Ensure this points to your passportConfig.js file
@@ -44,6 +46,11 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
+// CSRF Protection Middleware
+app.use(csrfProtection);
+app.use(addCsrfToken);
+
+
 // Global Variables Middleware (for flash messages and user info)
 app.use((req, res, next) => {
   res.locals.success = req.flash('success');
@@ -75,6 +82,18 @@ app.get('/', async (req, res) => {
     res.redirect('/posts');
   }
 });
+
+// CSRF Error Handler
+app.use(function (err, req, res, next) {
+  if (err.code === 'EBADCSRFTOKEN') {
+    // handle CSRF token errors here
+    req.flash('error', 'Invalid CSRF token.');
+    res.redirect('back');
+  } else {
+    next(err);
+  }
+});
+
 
 // Server Startup
 const PORT = 3000;
