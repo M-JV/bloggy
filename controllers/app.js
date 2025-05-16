@@ -1,4 +1,6 @@
-// app.js
+// controllers/app.js
+
+// imports and passport intialization
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
@@ -9,10 +11,13 @@ const Post = require('../models/Post'); // Make sure this path is correct
 const { csrfProtection, addCsrfToken } = require('../middleware/csrf');
 
 
-// Import Passport configuration
-require('../config/passportConfig'); // Ensure this points to your passportConfig.js file
+// Load and configure Passport strategies
+require('../config/passportConfig'); 
 
+
+// create express app
 const app = express();
+
 
 // Connect to MongoDB
 mongoose.connect('mongodb+srv://mejova:me1jo2va3%40@bloggy.u09ewis.mongodb.net/?retryWrites=true&w=majority&appName=Bloggy', {
@@ -26,29 +31,33 @@ mongoose.connect('mongodb+srv://mejova:me1jo2va3%40@bloggy.u09ewis.mongodb.net/?
   console.error('❌ MongoDB connection error:', err);
 });
 
+
 // Middleware Setup
 app.use(express.urlencoded({ extended: true })); // Parse form data
 app.use(express.static(path.join(__dirname, 'public'))); // Serve static files
-
 app.set('view engine', 'pug'); // Set Pug as the view engine
+
 
 // Session middleware
 app.use(session({
   secret: 'yourSecretKey', // Replace with a strong secret in production!
-  resave: false,
-  saveUninitialized: false,
+  resave: false, // avoid uneccessary session writes
+  saveUninitialized: false, // no sessions for unauthenticated users
 }));
+
 
 // Flash middleware (MUST come immediately after session)
 app.use(flash());
 
+
 // Passport middleware
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.initialize()); // adding to request pipline
+app.use(passport.session()); //read write from session
+
 
 // CSRF Protection Middleware
-app.use(csrfProtection);
-app.use(addCsrfToken);
+app.use(csrfProtection); //wraps csurf to check for valid token in incoming requests
+app.use(addCsrfToken); //
 
 
 // Global Variables Middleware (for flash messages and user info)
@@ -59,6 +68,7 @@ app.use((req, res, next) => {
   next();
 });
 
+
 // Route Handlers
 const authRoutes = require('../routes/auth');
 const postRoutes = require('../routes/posts');
@@ -68,11 +78,12 @@ app.use(authRoutes);
 app.use(postRoutes);
 app.use(adminRoutes);
 
+
 // Home Route
 app.get('/', async (req, res) => {
   try {
     const posts = await Post.find()
-      .populate('createdBy', 'username')
+      .populate('createdBy', 'username') //replaces the createdBy ObjectId with the user’s username 
       .limit(3);
 
     res.render('home', { posts });
@@ -82,6 +93,7 @@ app.get('/', async (req, res) => {
     res.redirect('/posts');
   }
 });
+
 
 // CSRF Error Handler
 app.use(function (err, req, res, next) {
@@ -96,7 +108,7 @@ app.use(function (err, req, res, next) {
 
 
 // Server Startup
-const PORT = 3000;
+const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server is running at: http://localhost:${PORT}`);
 });

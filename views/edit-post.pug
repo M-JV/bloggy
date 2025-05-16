@@ -14,7 +14,7 @@ block content
 
   .container.form-container
     h1.text-primary.text-center Edit Post
-    form(action=`/posts/${post._id}` method="POST")
+    form(method='POST', action=`/posts/${post._id}`)
       input(type="hidden" name="_csrf" value=csrfToken)
       .form-group
         label(for="title") Title

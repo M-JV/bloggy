@@ -7,10 +7,12 @@ const passport = require('passport');
 const User = require('../models/User');
 const { registerValidation, loginValidation } = require('../controllers/validation');
 
+
 // GET Register Page
 router.get('/register', (req, res) => {
   res.render('register');
 });
+
 
 // POST Register User
 router.post('/register', async (req, res) => {
@@ -32,13 +34,16 @@ router.post('/register', async (req, res) => {
       return res.redirect('/register');
     }
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
+
+// hash not working
+    // // Hash the password
+    // const hashedPassword = await bcrypt.hash(password, 10);
+
 
     // Create a new user
     const newUser = new User({
       username,
-      password: hashedPassword
+      password, //hashedPassword add a : after password
     });
 
     await newUser.save();
@@ -52,10 +57,12 @@ router.post('/register', async (req, res) => {
   }
 });
 
+
 // GET Login Page
 router.get('/login', (req, res) => {
   res.render('login');
 });
+
 
 // POST Login User
 router.post('/login', (req, res, next) => {
@@ -73,6 +80,7 @@ router.post('/login', (req, res, next) => {
     successFlash: 'Welcome back!',
   })(req, res, next);
 });
+
 
 // GET Logout User
 router.get('/logout', (req, res) => {

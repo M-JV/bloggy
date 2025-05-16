@@ -1,3 +1,6 @@
+// controller/posts.js
+
+
 const express = require('express');
 const mongoose = require('mongoose');
 const Post = require('../models/Post');
@@ -6,10 +9,12 @@ const { isAuthenticated } = require('../middleware/auth');
 const checkPostOwnership = require('../middleware/checkPostOwnership');
 const router = express.Router();
 
+
 // Create Post Form
 router.get('/posts/new', isAuthenticated, (req, res) => {
     res.render('new-post', { error: req.flash('error') });
 });
+
 
 // Create Post
 router.post('/posts', isAuthenticated, async (req, res) => {
@@ -25,6 +30,7 @@ router.post('/posts', isAuthenticated, async (req, res) => {
     // Process tags
     const processedTags = tags ? tags.split(',').map(tag => tag.trim().toLowerCase()) : [];
 
+    // create and save posts
     try {
         const post = new Post({ title, content, createdBy: req.user._id, tags: processedTags });
         await post.save();
@@ -36,6 +42,7 @@ router.post('/posts', isAuthenticated, async (req, res) => {
         res.redirect('/posts/new');
     }
 });
+
 
 // Search Posts
 router.get('/search', async (req, res) => {
@@ -61,6 +68,7 @@ router.get('/search', async (req, res) => {
   }
 });
 
+
 // View All Posts (without search filtering)
 router.get('/posts', async (req, res) => {
   try {
@@ -72,6 +80,7 @@ router.get('/posts', async (req, res) => {
     res.redirect('/');
   }
 });
+
 
 // View Single Post
 router.get('/posts/:id', async (req, res) => {
@@ -94,7 +103,12 @@ router.get('/posts/:id', async (req, res) => {
     }
 });
 
+
 // Edit & Update Post
+
+router.get('/posts/:id/edit', isAuthenticated, checkPostOwnership, async (req, res) => {
+  res.render('edit-post', { post: req.post });
+});
 router.post('/posts/:id', isAuthenticated, checkPostOwnership, async (req, res) => {
     try {
         Object.assign(req.post, req.body);
@@ -107,6 +121,7 @@ router.post('/posts/:id', isAuthenticated, checkPostOwnership, async (req, res) 
         res.redirect(`/posts/${req.params.id}/edit`);
     }
 });
+
 
 // Delete Post
 router.post('/posts/:id/delete', isAuthenticated, checkPostOwnership, async (req, res) => {

@@ -1,9 +1,11 @@
 // config/passportConfig.js
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const bcrypt = require('bcrypt');
-const User = require('../models/User'); // Ensure the path is correct
 
+const passport = require('passport'); // Core Passport
+const LocalStrategy = require('passport-local').Strategy; // “Username & password” strategy
+const bcrypt = require('bcrypt'); // For comparing password hashes
+const User = require('../models/User');  // Your Mongoose user model
+
+// defininh local strategy
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
@@ -26,11 +28,15 @@ passport.use(
   })
 );
 
-// Serialize & Deserialize User
+// Session Serialization & Deserialization 
+
+// storing users id
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
+// On each subsequent request, Passport pulls that id out of the session
+// and calls deserializeUser to turn it back into a full user object.
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await User.findById(id);

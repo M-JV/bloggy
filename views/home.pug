@@ -55,16 +55,17 @@ block content
     .container.mt-5
       h2.text-center.mb-4.text-secondary Recent Blog Posts
       if posts.length
-        .row.justify-content-center
+        //- Use Bootstrap row-cols to create 3 columns
+        .row.row-cols-1.row-cols-md-3.g-4
           each post in posts
-            .col-md-4
-              .card.mb-4.shadow
+            .col
+              .card.h-100.shadow
                 .card-body
                   h5.card-title= post.title
                   p.card-text= post.content.substring(0, 100) + '...'
+                .card-footer.bg-transparent
                   small.text-muted By #{post.createdBy.username}
-                  br
-                  a.btn.btn-primary.mt-2(href=`/posts/${post._id}`) Read More
+                  a.btn.btn-primary.float-end.mt-2(href=`/posts/${post._id}`) Read More
       else
         p.text-center.text-muted No blog posts yet. Be the first to create one!
         a.btn.btn-success.d-block.mx-auto.mt-2(href="/posts/new") Write Your First Blog

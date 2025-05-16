@@ -1,5 +1,3 @@
-//- views/admin-posts.pug
-
 extends layout
 
 block content
@@ -13,6 +11,7 @@ block content
 
   .container.admin-container
     h1.text-center.text-primary All Blog Posts
+
     if posts.length
       .list-group
         each post in posts
@@ -20,6 +19,8 @@ block content
             h5.font-weight-bold= post.title
             small.text-muted Created by #{post.createdBy.username} on #{post.createdAt.toDateString()}
             form(method="POST" action=`/admin/posts/${post._id}/delete`)
+              //- CSRF token field
+              input(type="hidden" name="_csrf" value=csrfToken)
               button.btn.btn-danger.btn-sm.mt-2(type="submit") Delete
     else
       p.text-danger.text-center No posts found.

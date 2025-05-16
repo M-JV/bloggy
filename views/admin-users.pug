@@ -1,4 +1,3 @@
-//- views/admin-users.pug
 extends layout
 
 block content
@@ -14,9 +13,16 @@ block content
     h1.text-center.text-primary All Users
     if users.length
       .list-group
-        each user in users
-          .list-group-item
-            h5.font-weight-bold #{user.username}
-            small.text-muted Admin Status: #{user.isAdmin ? "✅ Yes" : "❌ No"}
+        each u in users
+          .list-group-item.d-flex.justify-content-between.align-items-center
+            .user-info
+              h5.font-weight-bold= u.username
+              small.text-muted Admin Status: #{u.isAdmin ? "✅ Yes" : "❌ No"}
+            //- Prevent admins from deleting themselves
+            if u._id.toString() !== user._id.toString()
+              form(method="POST" action=`/admin/users/${u._id}/delete`)
+                //- CSRF token field
+                input(type="hidden" name="_csrf" value=csrfToken)
+                button.btn.btn-danger.btn-sm(type="submit") Delete
     else
       p.text-danger.text-center No users found.

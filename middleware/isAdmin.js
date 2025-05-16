@@ -1,5 +1,9 @@
 // middleware/isAdmin.js
+
+
 module.exports.isAdmin = (req, res, next) => {
+  
+  // checks user is logged in and is admin
     if (req.isAuthenticated() && req.user.isAdmin) {
       return next();
     }

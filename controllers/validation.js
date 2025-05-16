@@ -1,5 +1,8 @@
-// validation.js
+// controllers/validation.js
+
+// importing joi
 const Joi = require('@hapi/joi');
+
 
 // Registration Validation Schema
 const registerValidation = Joi.object({
@@ -13,6 +16,7 @@ const registerValidation = Joi.object({
   _csrf: Joi.string(), // allow _csrf token
 });
 
+
 // Login Validation Schema
 const loginValidation = Joi.object({
   username: Joi.string().required().messages({
@@ -21,8 +25,9 @@ const loginValidation = Joi.object({
   password: Joi.string().required().messages({
     'string.empty': 'Password is required',
   }),
-  _csrf: Joi.string(), // allow _csrf token
+  _csrf: Joi.string(), // allow _csrf token, whitelisting
 });
+
 
 // Blog Post Validation Schema
 const postValidation = Joi.object({
@@ -32,7 +37,7 @@ const postValidation = Joi.object({
   content: Joi.string().required().messages({
     'string.empty': 'Content is required',
   }),
-  _csrf: Joi.string(), // allow _csrf token
+  _csrf: Joi.string(), // allow _csrf token, otherwise joi complains
 });
 
 module.exports = { registerValidation, loginValidation, postValidation };

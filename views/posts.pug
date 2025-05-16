@@ -24,6 +24,13 @@ block content
             h5
               a(href=`/posts/${post._id}`) #{post.title}
             small.text-muted Created by #{post.createdBy.username} on #{post.createdAt.toDateString()}
+
+            //- Render tags as clickable badges
+            if post.tags && post.tags.length
+              .mt-2
+                each tag in post.tags
+                  a(href=`/search?q=${encodeURIComponent(tag)}`)
+                    span.badge.bg-secondary.mx-1= tag
     else
       p.text-danger No posts found matching "#{searchTerm}". Try another search!
 
